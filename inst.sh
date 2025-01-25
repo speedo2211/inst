@@ -1391,7 +1391,7 @@ qemu-system-x86_64 -accel hvf -accel tcg -machine q35 -smp 2 -m 1G \
 -chardev socket,id=chrtpm,path=tmp/tpm-sock ^
 -tpmdev emulator,id=tpm0,chardev=chrtpm ^
 -device tpm-tis,tpmdev=tpm0
-
+EOF
 }
 
 
