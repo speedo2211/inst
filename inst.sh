@@ -1378,20 +1378,22 @@ qemu-system-x86_64 -accel hvf -accel tcg -machine q35 -smp 2 -m 1G \
 
 #for win
 "C:\Program Files\qemu\qemu-system-x86_64" ^
--accel whpx -accel tcg ^
--machine q35,accel=whpx,kernel_irqchip=on ^
--smp 4,sockets=1,cores=4,threads=1 ^
--m 4G ^
--vga std ^
--device virtio-keyboard-pci ^
--device virtio-tablet-pci ^
--drive file=./imgscafford,format=raw,if=virtio ^
+-accel whpx -machine q35 -smp cores=32,threads=1,sockets=1 ^
+-m 16G ^
+-vga std -usbdevice tablet -usbdevice keyboard ^
+-drive "file=./imgscafford,format=raw" ^
 -net nic,model=virtio-net-pci -net user ^
 -boot order=c,menu=on ^
--chardev socket,id=chrtpm,path=tmp/tpm-sock ^
--tpmdev emulator,id=tpm0,chardev=chrtpm ^
--device tpm-tis,tpmdev=tpm0
+-device qemu-xhci,id=xhci -device usb-tablet ^
+-device virtio-keyboard ^
+-device virtio-mouse ^
+-device virtio-serial -chardev qemu-vdagent,id=ch1,name=vdagent,clipboard=on ^
+-device virtio-rng-pci ^
+-device virtio-balloon-pci ^
+-device tpm-tis,tpmdev=tpm0 ^
+-tpmdev passthrough,id=tpm0,path=/dev/tpm0
 EOF
+
 }
 
 
