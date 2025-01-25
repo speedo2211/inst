@@ -1361,21 +1361,29 @@ ddtoafile(){
   > $topdir/start.txt
   tee -a $topdir/start.txt > /dev/null <<EOF
 #for linux
-qemu-system-x86_64 -accel kvm -accel tcg -machine q35 -smp 2 -m 1G \\
--vga std -usbdevice tablet -usbdevice keyboard -drive "file=./imgscafford,format=raw" -net nic,model=virtio-net-pci -net user \\
--boot order=c,menu=on
+qemu-system-x86_64 -accel kvm -accel tcg -machine q35 -smp 2 -m 1G \
+-vga std -usbdevice tablet -usbdevice keyboard -drive "file=./imgscafford,format=raw" -net nic,model=virtio-net-pci -net user \
+-boot order=c,menu=on \
+-chardev socket,id=chrtpm,path=/tmp/swtpm-sock \
+-tpmdev emulator,id=tpm0,chardev=chrtpm \
+-device tpm-tis,tpmdev=tpm0
 
 #for osx
-qemu-system-x86_64 -accel hvf -accel tcg -machine q35 -smp 2 -m 1G \\
--vga std -usbdevice tablet -usbdevice keyboard -drive "file=./imgscafford,format=raw" -net nic,model=virtio-net-pci -net vmnet-shared \\
--boot order=c,menu=on
+qemu-system-x86_64 -accel hvf -accel tcg -machine q35 -smp 2 -m 1G \
+-vga std -usbdevice tablet -usbdevice keyboard -drive "file=./imgscafford,format=raw" -net nic,model=virtio-net-pci -net vmnet-shared \
+-boot order=c,menu=on \
+-chardev socket,id=chrtpm,path=/tmp/swtpm-sock \
+-tpmdev emulator,id=tpm0,chardev=chrtpm \
+-device tpm-tis,tpmdev=tpm0
 
 #for win
 "C:\Program Files\qemu\qemu-system-x86_64" -accel whpx -accel tcg -machine q35 -smp 2 -m 1G ^
 -vga std -usbdevice tablet -usbdevice keyboard -drive "file=./imgscafford,format=raw" -net nic,model=virtio-net-pci -net user ^
--boot order=c,menu=on
+-boot order=c,menu=on ^
+-chardev socket,id=chrtpm,path=C:\tmp\swtpm-sock ^
+-tpmdev emulator,id=tpm0,chardev=chrtpm ^
+-device tpm-tis,tpmdev=tpm0
 EOF
-
 }
 
 
